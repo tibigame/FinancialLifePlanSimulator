@@ -34,11 +34,11 @@ set "CARGO_TARGET_DIR=%CD%\src-tauri\target"
 rem The frontend was built above with the available package manager.
 call node_modules\.bin\tauri.cmd build --debug --no-bundle --config "{\"build\":{\"beforeBuildCommand\":\"\"}}"
 if errorlevel 1 goto failed
-if not exist "src-tauri\target\debug\financiallifeplansimulator.exe" (
+if not exist "src-tauri\target\debug\FinancialLifePlanSimulator.exe" (
     echo ERROR: The expected executable was not produced. 1>&2
     goto failed
 )
-copy /y "src-tauri\target\debug\financiallifeplansimulator.exe" "financiallifeplansimulator_debug.exe" >nul
+copy /y "src-tauri\target\debug\FinancialLifePlanSimulator.exe" "financiallifeplansimulator_debug.exe" >nul
 if errorlevel 1 goto failed
 echo Built: %CD%\financiallifeplansimulator_debug.exe
 popd

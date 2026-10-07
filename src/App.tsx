@@ -1,51 +1,31 @@
-import { useState } from "preact/hooks";
-import preactLogo from "./assets/preact.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { useNavigation } from "./app/useNavigation";
+import { PageBoundary } from "./app/PageBoundary";
+import { MainPage } from "./pages/main/MainPage";
+import { LogsPage } from "./pages/logs/LogsPage";
+import { SettingsPage } from "./pages/settings/SettingsPage";
+import { text } from "./shared/text";
+import type { PageId } from "./shared/types";
+import icon from "../src-tauri/icons/icon.svg";
+import styles from "./app/App.module.css";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+const pages: PageId[] = ["main", "logs", "settings"];
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
-  return (
-    <main class="container">
-      <h1>Welcome to Tauri + Preact</h1>
-
-      <div class="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://preactjs.com" target="_blank">
-          <img src={preactLogo} class="logo preact" alt="Preact logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and Preact logos to learn more.</p>
-
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onInput={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
+export default function App() {
+  const navigation = useNavigation();
+  return <div class={styles.shell}>
+    <aside class={styles.sidebar}>
+      <div class={styles.brand}><img src={icon} alt="" /><span>{text("app.name")}</span></div>
+      <nav class={styles.menu} aria-label={text("app.navigation")}>
+        {pages.map((page) => <button key={page} aria-current={navigation.page === page ? "page" : undefined}
+          onClick={() => navigation.setPage(page)}>{text(`app.${page}`)}</button>)}
+      </nav>
+    </aside>
+    <main class={styles.content}>
+      <PageBoundary key={navigation.page}>
+        {navigation.page === "main" && <MainPage />}
+        {navigation.page === "logs" && <LogsPage cache={navigation.logViewState} />}
+        {navigation.page === "settings" && <SettingsPage />}
+      </PageBoundary>
     </main>
-  );
+  </div>;
 }
-
-export default App;

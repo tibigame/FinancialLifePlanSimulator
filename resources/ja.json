@@ -1,0 +1,71 @@
+{
+  "app": {
+    "name": "ライフプランシミュレーター",
+    "navigation": "ページ",
+    "main": "メイン",
+    "logs": "ログ",
+    "settings": "設定",
+    "loading": "読み込み中…",
+    "retry": "再試行",
+    "error": "処理に失敗しました。",
+    "renderError": "ページを表示できませんでした。",
+    "close": "閉じる"
+  },
+  "pages": {
+    "main": { "message": "ここはメインページです" },
+    "logs": {
+      "description": "起動後に記録されたログを、新しい順に表示します。",
+      "level": "重要度",
+      "category": "種類",
+      "allLevels": "全ての重要度",
+      "allCategories": "全ての種類",
+      "levels": { "Trace": "Trace", "Debug": "Debug", "Info": "Info", "Warn": "Warn", "Error": "Error" },
+      "categories": { "Common": "Common", "Setting": "Setting", "Frontend": "Frontend", "External": "External" },
+      "time": "日時",
+      "source": "発生元",
+      "message": "メッセージ",
+      "empty": "条件に一致するログはありません。",
+      "count": "該当 {matched} 件 ／ 保持 {retained} 件（上限 {limit} 件）",
+      "latest": "最新のログへ",
+      "following": "最新のログに追従中",
+      "paused": "過去のログを閲覧中",
+      "fileActive": "ファイル保存中",
+      "fileDisabled": "ファイル保存なし（メモリへの記録は継続）",
+      "details": "ログの詳細",
+      "openDetails": "ログの詳細を表示",
+      "table": "実行ログ",
+      "trimmed": "保持件数を超えた古いログは画面から削除されます。保存済みのログはファイルで確認できます。"
+    },
+    "settings": {
+      "description": "アプリの動作を設定します。",
+      "logging": "ログ",
+      "retention": "ログの保持件数",
+      "unit": "件",
+      "help": "1〜999999件。初期値は1000件です。変更は保存後すぐに反映され、再起動後も引き継がれます。",
+      "prune": "件数を減らすと古いログは表示から削除されます。ログファイルには残ります。",
+      "save": "保存",
+      "saving": "保存中…",
+      "saved": "設定を保存しました。",
+      "invalid": "1〜999999の整数を入力してください。",
+      "portable": "設定の保存先",
+      "unavailable": "実行ファイルの場所を取得できませんでした。",
+      "loadWarning": "設定ファイルを読み込めなかったため、初期値を使用しています。",
+      "saveError": "設定を保存できませんでした。値は変更されていません。"
+    }
+  },
+  "native": {
+    "startup": "アプリを起動しました。",
+    "shutdown": "アプリを終了します。",
+    "settingsDefault": "初期設定を作成しました。",
+    "settingsLoaded": "設定を読み込みました。",
+    "settingsLoadFailed": "設定を読み込めませんでした。初期値を使用します。",
+    "settingsSaved": "ログの保持件数を {limit} 件に変更しました。",
+    "fileDisabled": "ログファイルを作成できませんでした。メモリへの記録を継続します。",
+    "fileWriteFailed": "ログファイルに書き込めませんでした。メモリへの記録を継続します。",
+    "pathUnavailable": "実行ファイルのディレクトリを取得できませんでした。",
+    "invalidLimit": "ログの保持件数は1〜999999件の整数で指定してください。",
+    "settingsSaveFailed": "設定ファイルの保存に失敗しました。",
+    "stateUnavailable": "アプリの内部状態にアクセスできません。",
+    "loggerFailed": "外部ログの収集を開始できませんでした。"
+  }
+}
