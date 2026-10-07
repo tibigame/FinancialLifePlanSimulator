@@ -1,0 +1,2 @@
+# FinancialLifePlanSimulator
+日本向け。金融とライフプランに関するシミュレーションを行います。
