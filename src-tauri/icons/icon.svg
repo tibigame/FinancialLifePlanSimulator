@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Financial Life Plan Simulator</title>
+  <desc>A home, a yen symbol and a rising life-plan chart.</desc>
+  <rect x="32" y="32" width="960" height="960" rx="216" fill="#16765D"/>
+  <path d="M184 440 464 208 744 440" fill="none" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M240 432V768Q240 800 272 800H672Q704 800 704 768V432L464 232Z" fill="#FFFFFF"/>
+  <g fill="none" stroke="#16765D" stroke-width="36" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m376 432 88 112 88-112M464 544v152M388 560h152M388 620h152"/>
+  </g>
+  <path d="m622 744 104-116 76 40 86-124" fill="none" stroke="#16765D" stroke-width="88" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m622 744 104-116 76 40 86-124m-88 0h88v88" fill="none" stroke="#85D6EF" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
