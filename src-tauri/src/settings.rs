@@ -14,12 +14,14 @@ static TEMP_ID: AtomicU64 = AtomicU64::new(0);
 #[serde(default)]
 pub struct Settings {
     pub log_retention: usize,
+    pub fix_random_seed: bool,
 }
 
 impl Default for Settings {
     fn default() -> Self {
         Self {
             log_retention: DEFAULT_RETENTION,
+            fix_random_seed: true,
         }
     }
 }

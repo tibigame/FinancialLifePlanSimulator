@@ -1,0 +1,16 @@
+backend,method,median_us_per_10000_u64,MB_per_second
+auto_avx2,direct_fill_bytes,15.778,5070.4
+auto_avx2,double_buffer_fill_bytes,19.049,4199.6
+auto_avx2,double_buffer_fill_u64,18.285,4375.2
+auto_avx2,double_buffer_get_u64_alloc,21.308,3754.4
+auto_avx2,startup_and_first_get_fixed_seed,83.000,963.9
+sse2,direct_fill_bytes,22.689,3526.0
+sse2,double_buffer_fill_bytes,24.391,3279.9
+sse2,double_buffer_fill_u64,25.738,3108.3
+sse2,double_buffer_get_u64_alloc,29.212,2738.6
+sse2,startup_and_first_get_fixed_seed,104.400,766.3
+soft,direct_fill_bytes,50.610,1580.7
+soft,double_buffer_fill_bytes,52.477,1524.5
+soft,double_buffer_fill_u64,52.345,1528.3
+soft,double_buffer_get_u64_alloc,52.403,1526.6
+soft,startup_and_first_get_fixed_seed,133.900,597.5

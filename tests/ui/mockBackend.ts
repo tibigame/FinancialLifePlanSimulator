@@ -4,6 +4,7 @@ import type { LogEntry, LogQuery, Severity, Category } from "../../src/shared/ty
 export async function mockBackend(page: Page, count = 1500) {
   await page.addInitScript((initialCount) => {
     let limit = 2000;
+    let fixRandomSeed = true;
     let sequence = initialCount;
     let saveFails = false;
     let largeDataset = false;
@@ -17,6 +18,7 @@ export async function mockBackend(page: Page, count = 1500) {
     }));
     const settings = () => ({
       logRetention: limit,
+      fixRandomSeed,
       path: "D:\\Portable\\settiong.toml",
       loadWarning: null,
     });
@@ -39,6 +41,7 @@ export async function mockBackend(page: Page, count = 1500) {
             const next = Number(args.logRetention);
             if (!Number.isInteger(next) || next < 1 || next > 999999) throw new Error("invalid");
             limit = next;
+            fixRandomSeed = Boolean(args.fixRandomSeed);
             entries = entries.slice(-limit);
             return settings();
           }

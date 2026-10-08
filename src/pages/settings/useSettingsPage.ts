@@ -6,6 +6,7 @@ import type { Settings } from "../../shared/types";
 export function useSettingsPage() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [value, setValue] = useState("");
+  const [fixRandomSeed, setFixRandomSeed] = useState(true);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -19,6 +20,7 @@ export function useSettingsPage() {
       if (!active) return;
       setSettings(result);
       setValue(String(result.logRetention));
+      setFixRandomSeed(result.fixRandomSeed);
     }).catch((reason: unknown) => {
       if (active) setError(errorMessage(reason));
     });
@@ -32,17 +34,19 @@ export function useSettingsPage() {
     if (!valid) { setError(text("pages.settings.invalid")); return; }
     setSaving(true);
     try {
-      const result = await saveSettings(Number(value));
+      const result = await saveSettings(Number(value), fixRandomSeed);
       setSettings(result);
       setValue(String(result.logRetention));
       setSaved(true);
+      setFixRandomSeed(result.fixRandomSeed);
     } catch (reason) {
       setError(`${text("pages.settings.saveError")} ${errorMessage(reason)}`);
     } finally { setSaving(false); }
   }
 
   return {
-    settings, value, error, saved, saving, valid, save,
+    settings, value, fixRandomSeed, error, saved, saving, valid, save,
+    changeFixRandomSeed(next: boolean) { setFixRandomSeed(next); setSaved(false); },
     changeValue(next: string) { setValue(next); setSaved(false); },
     retry() { setAttempt((previous) => previous + 1); },
   };

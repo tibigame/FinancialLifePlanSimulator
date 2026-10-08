@@ -3,6 +3,9 @@
 .header p { color: var(--muted); margin: 8px 0 0; }
 .form { padding: 28px 0; max-width: 780px; }
 .form h2 { margin-bottom: 24px; }
+.randomHeading { margin-top: 32px; }
+.form .checkbox { display: flex; align-items: center; gap: 10px; }
+.checkbox input { width: 18px; height: 18px; accent-color: var(--accent); }
 .form label { display: block; margin-bottom: 10px; font-weight: 500; }
 .inputRow { display: flex; align-items: center; gap: 12px; }
 .inputRow input { width: 180px; padding: 9px 12px; border: 1px solid #999; border-radius: 4px; background: white; }

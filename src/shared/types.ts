@@ -34,6 +34,7 @@ export interface LogPage {
 }
 export interface Settings {
   logRetention: number;
+  fixRandomSeed: boolean;
   path: string | null;
   loadWarning: string | null;
 }

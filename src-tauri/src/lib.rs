@@ -1,5 +1,6 @@
 mod commands;
 mod logging;
+pub mod rand;
 mod settings;
 mod text;
 
@@ -73,11 +74,13 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     }
     let exit_logs = logs.clone();
     let exit_text = text.clone();
+    let random = rand::SystemRandom::new(settings.value.fix_random_seed)?;
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .manage(AppState {
             logs,
             settings: Mutex::new(settings),
+            random: Mutex::new(random),
             text,
         })
         .invoke_handler(tauri::generate_handler![

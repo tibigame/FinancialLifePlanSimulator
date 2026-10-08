@@ -1,0 +1,19 @@
+[package]
+name = "lifeplan-rng-bench"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# Keep backend experiments independent of the Tauri application build.
+[workspace]
+
+[dependencies]
+rand = { version = "0.10.3", default-features = false, features = ["sys_rng"] }
+chacha20 = { version = "=0.10.2", default-features = false, features = ["rng"] }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true

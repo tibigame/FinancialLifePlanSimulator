@@ -7,15 +7,21 @@ fn creates_portable_default_and_persists_changes() -> TestResult {
     let directory = TestDirectory::new()?;
     let mut store = SettingsStore::load(Some(&directory.0));
     assert_eq!(store.value.log_retention, DEFAULT_RETENTION);
+    assert!(store.value.fix_random_seed);
     assert!(directory.0.join("settiong.toml").is_file());
     assert!(store.load_warning.is_none());
     store.save(Settings {
         log_retention: MAX_RETENTION,
+        fix_random_seed: false,
     })?;
     let restored = SettingsStore::load(Some(&directory.0));
     assert_eq!(restored.value.log_retention, MAX_RETENTION);
+    assert!(!restored.value.fix_random_seed);
     assert!(restored.load_warning.is_none());
-    store.save(Settings { log_retention: 1 })?;
+    store.save(Settings {
+        log_retention: 1,
+        ..Settings::default()
+    })?;
     assert_eq!(
         SettingsStore::load(Some(&directory.0)).value.log_retention,
         1
@@ -31,7 +37,8 @@ fn validates_limits_without_changing_saved_or_active_value() -> TestResult {
         assert!(
             store
                 .save(Settings {
-                    log_retention: invalid
+                    log_retention: invalid,
+                    ..Settings::default()
                 })
                 .is_err()
         );
@@ -70,7 +77,14 @@ fn failed_save_keeps_old_value_and_cleans_temporary_file() -> TestResult {
     let path = directory.0.join("settiong.toml");
     fs::remove_file(&path)?;
     fs::create_dir(&path)?;
-    assert!(store.save(Settings { log_retention: 25 }).is_err());
+    assert!(
+        store
+            .save(Settings {
+                log_retention: 25,
+                ..Settings::default()
+            })
+            .is_err()
+    );
     assert_eq!(store.value.log_retention, DEFAULT_RETENTION);
     assert_eq!(fs::read_dir(&directory.0)?.count(), 1);
     Ok(())
@@ -81,5 +95,23 @@ fn missing_executable_directory_uses_defaults() {
     let mut store = SettingsStore::load(None);
     assert_eq!(store.value.log_retention, DEFAULT_RETENTION);
     assert!(store.load_warning.is_some());
-    assert!(store.save(Settings { log_retention: 10 }).is_err());
+    assert!(
+        store
+            .save(Settings {
+                log_retention: 10,
+                ..Settings::default()
+            })
+            .is_err()
+    );
+}
+
+#[test]
+fn older_settings_default_to_fixed_seed() -> TestResult {
+    let directory = TestDirectory::new()?;
+    fs::write(directory.0.join("settiong.toml"), "log_retention = 123")?;
+    let store = SettingsStore::load(Some(&directory.0));
+    assert!(store.load_warning.is_none());
+    assert_eq!(store.value.log_retention, 123);
+    assert!(store.value.fix_random_seed);
+    Ok(())
 }

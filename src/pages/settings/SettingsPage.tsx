@@ -30,6 +30,14 @@ export function SettingsPage() {
         </div>
         <p id="retention-help" class={styles.help}>{text("pages.settings.help")}</p>
         <p id="retention-prune" class={styles.help}>{text("pages.settings.prune")}</p>
+        <h2 class={styles.randomHeading}>{text("pages.settings.random")}</h2>
+        <label class={styles.checkbox}>
+          <input type="checkbox" checked={model.fixRandomSeed} disabled={model.saving}
+            aria-describedby="random-seed-help"
+            onChange={(event) => model.changeFixRandomSeed(event.currentTarget.checked)} />
+          {text("pages.settings.fixRandomSeed")}
+        </label>
+        <p id="random-seed-help" class={styles.help}>{text("pages.settings.randomSeedHelp")}</p>
         <div class={styles.actions}>
           <button type="submit" disabled={model.saving || !model.valid}>
             {text(model.saving ? "pages.settings.saving" : "pages.settings.save")}

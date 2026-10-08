@@ -39,6 +39,9 @@
     "settings": {
       "description": "アプリの動作を設定します。",
       "logging": "ログ",
+      "random": "乱数",
+      "fixRandomSeed": "乱数シードを固定する",
+      "randomSeedHelp": "オンにすると同じシードで乱数を生成します。開発中の初期値はオンです。変更を保存すると乱数列を初期化します。",
       "retention": "ログの保持件数",
       "unit": "件",
       "help": "1〜999999件。初期値は1000件です。変更は保存後すぐに反映され、再起動後も引き継がれます。",
@@ -59,7 +62,7 @@
     "settingsDefault": "初期設定を作成しました。",
     "settingsLoaded": "設定を読み込みました。",
     "settingsLoadFailed": "設定を読み込めませんでした。初期値を使用します。",
-    "settingsSaved": "ログの保持件数を {limit} 件に変更しました。",
+    "settingsSaved": "設定を保存しました。ログの保持件数: {limit} 件、乱数シード固定: {fixed}。",
     "fileDisabled": "ログファイルを作成できませんでした。メモリへの記録を継続します。",
     "fileWriteFailed": "ログファイルに書き込めませんでした。メモリへの記録を継続します。",
     "pathUnavailable": "実行ファイルのディレクトリを取得できませんでした。",
