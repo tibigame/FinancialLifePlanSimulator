@@ -11,6 +11,7 @@ use std::{
 pub struct SystemRandom {
     current: Vec<u8>,
     cursor: usize,
+    consumed_buffers: usize,
     ready: Option<Receiver<Vec<u8>>>,
     recycle: Option<SyncSender<Vec<u8>>>,
     worker: Option<JoinHandle<()>>,
@@ -31,6 +32,7 @@ impl SystemRandom {
         Ok(Self {
             current: Vec::new(),
             cursor: 0,
+            consumed_buffers: 0,
             ready: Some(ready),
             recycle: Some(recycle),
             worker: Some(worker),
@@ -41,6 +43,18 @@ impl SystemRandom {
     /// Keep this with a simulation result to replay the same byte stream.
     pub fn seed(&self) -> [u8; 32] {
         self.seed
+    }
+
+    /// Number of buffers fully consumed, excluding partially read or prefetched buffers.
+    pub fn consumed_buffers(&self) -> usize {
+        self.consumed_buffers
+    }
+
+    fn advance_cursor(&mut self, count: usize) {
+        self.cursor += count;
+        if self.cursor == self.current.len() {
+            self.consumed_buffers += 1;
+        }
     }
 
     fn ensure_buffer(&mut self) -> io::Result<()> {
@@ -72,7 +86,7 @@ impl SystemRandom {
             self.ensure_buffer()?;
             let count = destination.len().min(self.current.len() - self.cursor);
             destination[..count].copy_from_slice(&self.current[self.cursor..self.cursor + count]);
-            self.cursor += count;
+            self.advance_cursor(count);
             destination = &mut destination[count..];
         }
         Ok(())
@@ -99,7 +113,7 @@ impl SystemRandom {
                 {
                     *value = T::decode(bytes);
                 }
-                self.cursor = end;
+                self.advance_cursor(count * T::WIDTH);
                 destination = &mut destination[count..];
             }
         }

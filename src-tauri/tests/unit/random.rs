@@ -25,6 +25,7 @@ fn mixed_reads_preserve_every_byte_across_buffer_boundaries() -> TestResult {
     actual.extend(random.get::<u8>(remaining)?);
     assert_eq!(actual, expected);
     assert_eq!(random.seed(), FIXED_SEED);
+    assert_eq!(random.consumed_buffers(), 4);
     Ok(())
 }
 
@@ -48,8 +49,50 @@ fn empty_and_rejected_requests_do_not_consume_bytes() -> TestResult {
     assert!(random.get::<u64>(0)?.is_empty());
     random.fill_bytes(&mut [])?;
     assert!(random.get::<u128>(usize::MAX).is_err());
+    assert_eq!(random.consumed_buffers(), 0);
     let mut reference = SystemRandom::new(true)?;
     assert_eq!(random.get::<u32>(20)?, reference.get::<u32>(20)?);
+    Ok(())
+}
+
+#[test]
+fn concurrent_gets_consume_exactly_ten_buffers() -> TestResult {
+    const THREADS: usize = 4;
+    let random = std::sync::Mutex::new(SystemRandom::new(true)?);
+    let barrier = std::sync::Barrier::new(THREADS);
+    let total = std::thread::scope(|scope| -> std::io::Result<usize> {
+        let mut workers = Vec::new();
+        for _ in 0..THREADS {
+            workers.push(scope.spawn(|| -> std::io::Result<usize> {
+                barrier.wait();
+                let mut received = 0;
+                let target = RAND_CACHE_BYTES * 10 / THREADS;
+                while received < target {
+                    let count = (target - received).min(1001);
+                    let bytes = random
+                        .lock()
+                        .map_err(|_| std::io::Error::other("Random mutex poisoned"))?
+                        .get::<u8>(count)?;
+                    assert_eq!(bytes.len(), count);
+                    received += bytes.len();
+                    std::thread::yield_now();
+                }
+                Ok(received)
+            }));
+        }
+        let mut total = 0;
+        for worker in workers {
+            total += worker
+                .join()
+                .map_err(|_| std::io::Error::other("Random test worker panicked"))??;
+        }
+        Ok(total)
+    })?;
+    assert_eq!(total, RAND_CACHE_BYTES * 10);
+    let random = random
+        .into_inner()
+        .map_err(|_| std::io::Error::other("Random mutex poisoned"))?;
+    assert_eq!(random.consumed_buffers(), 10);
     Ok(())
 }
 
